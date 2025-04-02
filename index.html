@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Workout Log</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.3/purify.min.js"></script>
+</head>
+<body>
+    <div id="workout-log">
+        <h3 style="text-align: center;"><span style="color: #ffa400;">DISCLAIMER:&nbsp; At the bottom ↓</span></h3>
+        <h1>Ultimate Workout Log</h1>
+
+        <label>Workout Name:</label>
+        <input id="workout-name" type="text" />
+
+        <label>Workout Date:</label>
+        <input id="workout-date" type="date" />
+
+        <div id="workout-entries">
+            <div class="workout-entry header">
+                <input readonly="" type="text" value="Exercise" />
+                <input readonly="" type="text" value="Sets" />
+                <input readonly="" type="text" value="Reps" />
+                <input readonly="" type="text" value="Weight" />
+                <input readonly="" type="text" value="Notes" />
+            </div>
+        </div>
+
+        <button id="add-entry">Add Exercise</button>
+        <button id="remove-entry">Remove Exercise</button>
+        <button id="save-workout">Save Log</button>
+        <button id="load-workout">Load Log</button>
+        <button id="print-pdf">Print as PDF</button>
+        <button id="download-workout">Download Workout</button>
+        <input accept=".json" id="upload-workout" type="file" />
+
+        <div id="confirmation-dialog">
+            <p>Are you sure you want to delete this exercise?</p>
+            <button id="confirm-yes">Yes</button>
+            <button id="confirm-no">No</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
