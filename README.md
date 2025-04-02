@@ -17,6 +17,7 @@ This is a simple web application for logging your workouts. It allows you to:
 * **JSON Import/Export:** Download your workout logs as JSON files and upload them later.
 * **Input Validation:** Ensures that all required fields are filled and that the data is in the correct format.
 * **Data Sanitization:** Uses DOMPurify to prevent XSS vulnerabilities.
+* **Content Security Policy (CSP):** Implemented via a separate script to enhance security by restricting the resources that the browser is allowed to load.
 
 ## How to Use
 
@@ -32,11 +33,17 @@ This is a simple web application for logging your workouts. It allows you to:
 
 ## Technologies Used
 
-* HTML
-* CSS
-* JavaScript
-* jsPDF (for PDF generation)
-* DOMPurify (for input sanitization)
+* **HTML:** For the structure of the web page.
+* **CSS:** For styling the web page.
+* **JavaScript:** For the interactive functionality of the application.
+* **jsPDF:** For generating PDF documents.
+* **DOMPurify:** For sanitizing user-supplied HTML to prevent cross-site scripting (XSS) attacks.
+* **Local Storage:** For storing workout log data in the browser.
+* **JSON:** For data interchange when downloading and uploading workout logs.
+* **Content Security Policy (CSP):** For enhanced security, using a separate script to define allowed resources.
+* **FileReader API:** For reading the contents of uploaded JSON files.
+* **Blob API:** For creating downloadable JSON files.
+* **URL API:** For creating object URLs for downloaded files.
 
 ## Installation
 
