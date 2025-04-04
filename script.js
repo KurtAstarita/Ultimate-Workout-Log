@@ -166,14 +166,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-            doc.save("workoutLog.pdf");
-            alert("PDF generated successfully with dynamic data!");
-        } catch (error) {
-            console.error("PDF generation error:", error);
-            alert("Failed to generate PDF. Please try again.");
-        }
-    });
-
     document.getElementById("download-workout").addEventListener("click", () => {
         const workout = localStorage.getItem("workoutLog");
         if (!workout) return alert("No workout log to download.");
