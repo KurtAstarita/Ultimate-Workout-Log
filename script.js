@@ -120,48 +120,51 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    document.getElementById("print-pdf").addEventListener("click", () => {
-        const { jsPDF } = window.jspdf;
-        if (!jsPDF) {
-            alert("jsPDF library not loaded. PDF generation is unavailable.");
-            return;
-        }
-        const doc = new jsPDF();
-        try {
-            doc.text("Daily Workout Chart", 10, 10);
-            doc.text(`Workout Name: ${workoutName.value || "Unnamed Workout"}`, 10, 20);
-            doc.text(`Date: ${workoutDate.value || "No Date"}`, 10, 30);
+   document.getElementById("print-pdf").addEventListener("click", () => {
+    const { jsPDF } = window.jspdf;
+    if (!jsPDF) {
+        alert("jsPDF library not loaded. PDF generation is unavailable.");
+        return;
+    }
 
-            let y = 40;
-            const lineHeight = 10;
-            const pageWidth = doc.internal.pageSize.getWidth() - 20;
+    const doc = new jsPDF();
 
-            doc.text("Exercise", 10, y);
-            doc.text("Sets", 50, y);
-            doc.text("Reps", 70, y);
-            doc.text("Weight", 90, y);
-            doc.text("Notes", 110, y);
-            y += lineHeight;
+    try {
+        doc.text("Daily Workout Chart", 10, 10);
+        doc.text(`Workout Name: ${workoutName.value || "Unnamed Workout"}`, 10, 20);
+        doc.text(`Date: ${workoutDate.value || "No Date"}`, 10, 30);
 
-            Array.from(workoutEntries.children).slice(1).forEach(entry => {
-                const inputs = entry.querySelectorAll("input");
-                const exercise = inputs[0].value || "";
-                const sets = inputs[1].value || "";
-                const reps = inputs[2].value || "";
-                const weight = inputs[3].value || "";
-                const notes = inputs[4].value || "";
+        let headers = ["Exercise", "Sets", "Reps", "Weight", "Notes"];
+        let rows = [];
 
-                doc.text(exercise, 10, y);
-                doc.text(sets, 50, y);
-                doc.text(reps, 70, y);
-                doc.text(weight, 90, y);
-                const splitNotes = doc.splitTextToSize(notes, pageWidth - 110);
-                splitNotes.forEach(noteLine =>{
-                    doc.text(noteLine, 110, y);
-                    y += lineHeight;
-                });
-                y+= lineHeight;
-            });
+        Array.from(workoutEntries.children).slice(1).forEach(entry => {
+            const inputs = entry.querySelectorAll("input");
+            let rowData = inputs.map(input => input.value || "N/A");
+            rows.push(rowData);
+        });
+
+        doc.autoTable({
+            head: [headers],
+            body: rows,
+            startY: 40, // Start table below the date
+            styles: {
+                fontSize: 8, // Smaller font size
+                cellPadding: 2, // Reduce cell padding
+            },
+            headStyles: {
+                fontSize: 8,
+                fillColor: [200, 200, 200], // Light gray header
+            },
+        });
+
+        doc.save("workoutLog.pdf");
+        alert("PDF generated successfully with dynamic data!");
+
+    } catch (error) {
+        console.error("PDF generation error:", error);
+        alert("Failed to generate PDF. Please try again.");
+    }
+});
 
             doc.save("workoutLog.pdf");
             alert("PDF generated successfully with dynamic data!");
