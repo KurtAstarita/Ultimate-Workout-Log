@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let rows = [];
 
         Array.from(workoutEntries.children).slice(1).forEach(entry => {
-            const inputs = entry.querySelectorAll("input");
+            const inputs = Array.from(entry.querySelectorAll("input")); // Convert NodeList to Array
             let rowData = inputs.map(input => input.value || "N/A");
             rows.push(rowData);
         });
@@ -146,14 +146,14 @@ document.addEventListener('DOMContentLoaded', function() {
         doc.autoTable({
             head: [headers],
             body: rows,
-            startY: 40, // Start table below the date
+            startY: 40,
             styles: {
-                fontSize: 8, // Smaller font size
-                cellPadding: 2, // Reduce cell padding
+                fontSize: 8,
+                cellPadding: 2,
             },
             headStyles: {
                 fontSize: 8,
-                fillColor: [200, 200, 200], // Light gray header
+                fillColor: [200, 200, 200],
             },
         });
 
@@ -165,7 +165,6 @@ document.addEventListener('DOMContentLoaded', function() {
         alert("Failed to generate PDF. Please try again.");
     }
 });
-
     document.getElementById("download-workout").addEventListener("click", () => {
         const workout = localStorage.getItem("workoutLog");
         if (!workout) return alert("No workout log to download.");
