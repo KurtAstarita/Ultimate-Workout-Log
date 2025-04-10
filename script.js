@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
     document.getElementById("download-workout").addEventListener("click", () => {
         const workout = localStorage.getItem("workoutLog");
-        if (!workout) return alert("No workout log to download, you must click 'Save' first!");
+        if (!workout) return alert("No workout log to download. You must add entries & fill them out, then click 'Save' before you can download!");
 
         const blob = new Blob([workout], { type: "application/json" });
         const a = document.createElement("a");
