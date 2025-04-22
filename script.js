@@ -7,24 +7,38 @@ document.addEventListener('DOMContentLoaded', function() {
     const confirmNo = document.getElementById("confirm-no");
 
     let entryToRemove = null;
+    let lastSaveTime = 0;
+    const saveInterval = 2000; // 2 seconds
 
-    function validateInput(inputId, type, required = false) {
+    function validateInput(inputId, type, maxLength, required = false) {
         const input = document.getElementById(inputId);
         const value = input ? input.value : "";
         let isValid = true;
+        let errorMessage = "";
 
         if (required && !value) {
             isValid = false;
+            errorMessage = `Please fill out the ${inputId.replace('-', ' ')} field.`;
         } else if (type === 'number') {
             if (isNaN(value) || parseFloat(value) < 0) {
                 isValid = false;
+                errorMessage = `Invalid number for ${inputId.replace('-', ' ')}. Must be non-negative.`;
             }
+        } else if (type === 'integer') {
+            if (!/^\d+$/.test(value) || parseInt(value) < 1) {
+                isValid = false;
+                errorMessage = `Invalid ${inputId.replace('-', ' ')}. Must be a positive integer.`;
+            }
+        } else if (type === 'text' && value.length > maxLength) {
+            isValid = false;
+            errorMessage = `${inputId.replace('-', ' ')} cannot exceed ${maxLength} characters.`;
         } else if (type === 'date' && isNaN(Date.parse(value))) {
             isValid = false;
+            errorMessage = `Invalid date for ${inputId.replace('-', ' ')}.`;
         }
 
         if (!isValid && inputId) {
-            alert(`Invalid input for ${inputId}.`);
+            alert(errorMessage);
             input.classList.add('invalid-input');
             input.focus();
             return false;
@@ -35,8 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function sanitizeInput(input) {
-        let sanitized = DOMPurify.sanitize(input);
-        return sanitized.replace(/[<>]/g, '');
+        return DOMPurify.sanitize(input);
     }
 
     document.getElementById("add-entry").addEventListener("click", () => {
@@ -44,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
         entry.classList.add("workout-entry");
         entry.innerHTML = `
             <input type="text" placeholder="Exercise" id="exercise-${Date.now()}">
-            <input type="number" placeholder="Set" min="1" id="sets-${Date.now()}">
+            <input type="number" placeholder="Sets" min="1" id="sets-${Date.now()}">
             <input type="number" placeholder="Reps" min="1" id="reps-${Date.now()}">
             <input type="number" placeholder="Weight" min="0" id="weight-${Date.now()}">
             <input type="text" placeholder="Notes" id="notes-${Date.now()}">
@@ -71,11 +84,18 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.getElementById("save-workout").addEventListener("click", () => {
-        if(!validateInput("workout-name", "text", true) ||
-            !validateInput("workout-date", "date", true)
-        ){
+        const currentTime = Date.now();
+        if (currentTime - lastSaveTime < saveInterval) {
+            alert("Please wait a moment before saving again.");
             return;
         }
+
+        if (!validateInput("workout-name", "text", 255, true) ||
+            !validateInput("workout-date", "date", null, true)
+        ) {
+            return;
+        }
+
         const workout = {
             name: sanitizeInput(workoutName.value),
             date: workoutDate.value,
@@ -83,22 +103,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 .slice(1)
                 .map(entry => {
                     const inputs = Array.from(entry.querySelectorAll("input"));
-                    if(!validateInput(inputs[0].id || "", "text", true) ||
-                        !validateInput(inputs[1].id || "", "number", true) ||
-                        !validateInput(inputs[2].id || "", "number", true) ||
-                        !validateInput(inputs[3].id || "", "number", true) ||
-                        !validateInput(inputs[4].id || "", "text", false)){
+                    const exerciseValid = validateInput(inputs[0].id || "", "text", 255, true);
+                    const setsValid = validateInput(inputs[1].id || "", "integer", null, true);
+                    const repsValid = validateInput(inputs[2].id || "", "integer", null, true);
+                    const weightValid = validateInput(inputs[3].id || "", "number", null, true);
+                    const notesValid = validateInput(inputs[4].id || "", "text", 255, false);
+
+                    if (!exerciseValid || !setsValid || !repsValid || !weightValid || !notesValid) {
                         return null;
                     }
                     return inputs.map(input => sanitizeInput(input.value));
                 }).filter(entry => entry !== null)
         };
+
         if (!workout.name || !workout.date || workout.entries.length === 0) {
             alert("Please complete all fields before saving.");
             return;
         }
+
         localStorage.setItem("workoutLog", JSON.stringify(workout));
         alert("Workout log saved!");
+        lastSaveTime = currentTime;
     });
 
     document.getElementById("load-workout").addEventListener("click", () => {
@@ -120,54 +145,55 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-   document.getElementById("print-pdf").addEventListener("click", () => {
-    const { jsPDF } = window.jspdf;
-    if (!jsPDF) {
-        alert("jsPDF library not loaded. PDF generation is unavailable.");
-        return;
-    }
+    document.getElementById("print-pdf").addEventListener("click", () => {
+        const { jsPDF } = window.jspdf;
+        if (!jsPDF) {
+            alert("jsPDF library not loaded. PDF generation is unavailable.");
+            return;
+        }
 
-    const doc = new jsPDF();
+        const doc = new jsPDF();
 
-    try {
-        doc.text("Daily Workout Chart", 10, 10);
-        doc.text(`Workout Name: ${workoutName.value || "Unnamed Workout"}`, 10, 20);
-        doc.text(`Date: ${workoutDate.value || "No Date"}`, 10, 30);
+        try {
+            doc.text("Ultimate Workout Chart", 10, 10);
+            doc.text(`Workout Name: ${workoutName.value || "Unnamed Workout"}`, 10, 20);
+            doc.text(`Date: ${workoutDate.value || "No Date"}`, 10, 30);
 
-        let headers = ["Exercise", "Sets", "Reps", "Weight", "Notes"];
-        let rows = [];
+            let headers = ["Exercise", "Sets", "Reps", "Weight", "Notes"];
+            let rows = [];
 
-        Array.from(workoutEntries.children).slice(1).forEach(entry => {
-            const inputs = Array.from(entry.querySelectorAll("input")); // Convert NodeList to Array
-            let rowData = inputs.map(input => input.value || "N/A");
-            rows.push(rowData);
-        });
+            Array.from(workoutEntries.children).slice(1).forEach(entry => {
+                const inputs = Array.from(entry.querySelectorAll("input"));
+                let rowData = inputs.map(input => input.value || "N/A");
+                rows.push(rowData);
+            });
 
-        doc.autoTable({
-            head: [headers],
-            body: rows,
-            startY: 40,
-            styles: {
-                fontSize: 8,
-                cellPadding: 2,
-            },
-            headStyles: {
-                fontSize: 8,
-                fillColor: [200, 200, 200],
-            },
-        });
+            doc.autoTable({
+                head: [headers],
+                body: rows,
+                startY: 40,
+                styles: {
+                    fontSize: 8,
+                    cellPadding: 2,
+                },
+                headStyles: {
+                    fontSize: 8,
+                    fillColor: [200, 200, 200],
+                },
+            });
 
-        doc.save("workoutLog.pdf");
-        alert("PDF generated successfully with dynamic data!");
+            doc.save("workoutLog.pdf");
+            alert("PDF generated successfully with workout data!");
 
-    } catch (error) {
-        console.error("PDF generation error:", error);
-        alert("Failed to generate PDF. Please try again.");
-    }
-});
+        } catch (error) {
+            console.error("PDF generation error:", error);
+            alert("Failed to generate PDF. Please try again.");
+        }
+    });
+
     document.getElementById("download-workout").addEventListener("click", () => {
         const workout = localStorage.getItem("workoutLog");
-        if (!workout) return alert("No workout log to download. You must add entries & fill them out, then click 'Save' before you can download!");
+        if (!workout) return alert("No workout log to download. Add and save entries first!");
 
         const blob = new Blob([workout], { type: "application/json" });
         const a = document.createElement("a");
@@ -187,15 +213,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 const parsedData = JSON.parse(e.target.result);
 
                 if (typeof parsedData !== 'object' || parsedData === null ||
-                    !parsedData.hasOwnProperty('name') || !parsedData.hasOwnProperty('date') ||
-                    !parsedData.hasOwnProperty('entries') || !Array.isArray(parsedData.entries)) {
+                    !parsedData.hasOwnProperty('name') || typeof parsedData.name !== 'string' ||
+                    !parsedData.hasOwnProperty('date') || typeof parsedData.date !== 'string' ||
+                    !parsedData.hasOwnProperty('entries') || !Array.isArray(parsedData.entries)
+                ) {
                     throw new Error("Invalid workout log structure.");
                 }
 
                 for (const entry of parsedData.entries) {
-                    if (!Array.isArray(entry) || entry.length !== 5) {
+                    if (!Array.isArray(entry) || entry.length !== 5 ||
+                        typeof entry[0] !== 'string' || (typeof entry[1] !== 'string' && isNaN(Number(entry[1]))) ||
+                        (typeof entry[2] !== 'string' && isNaN(Number(entry[2]))) || (typeof entry[3] !== 'string' && isNaN(Number(entry[3]))) ||
+                        typeof entry[4] !== 'string'
+                    ) {
                         throw new Error("Invalid workout entry structure.");
                     }
+                    // Ensure numeric values are treated as numbers
+                    entry[1] = Number(entry[1]);
+                    entry[2] = Number(entry[2]);
+                    entry[3] = Number(entry[3]);
                 }
 
                 localStorage.setItem("workoutLog", JSON.stringify(parsedData));
