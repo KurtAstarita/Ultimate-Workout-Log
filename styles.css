@@ -39,14 +39,14 @@
 }
 
 .workout-log-container button {
-  background-color: #4CAF50; /* Green */
+  background-color: #FFA500; /* Orange */
   color: white;
   border: none;
   cursor: pointer;
 }
 
 .workout-log-container button:hover {
-  background-color: #45a049; /* Darker Green */
+  background-color: #FF8C00; /* Darker Orange */
 }
 
 .workout-log-container #workout-entries {
