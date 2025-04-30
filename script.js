@@ -264,3 +264,4 @@ function sendHeightToParent() {
     
 window.onload = sendHeightToParent;
 window.addEventListener('resize', sendHeightToParent);
+});
