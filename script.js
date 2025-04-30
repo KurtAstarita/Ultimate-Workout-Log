@@ -249,20 +249,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <!-- .......................... Flexable Iframe .................................... -->
 
-function sendHeightToParent() {
-    const contentHeight = Math.max(
-        document.body.scrollHeight,
-        document.documentElement.scrollHeight,
-        document.body.offsetHeight,
-        document.documentElement.offsetHeight
-    );
-    window.parent.postMessage({ height: contentHeight }, 'https://post40gains-fitness-tools.kurtastarita.com'); // Replace '*' with your parent's origin for security
-}
+window.addEventListener('message', function(event) {
+    // Check the origin of the message for security if you're not using '*'
+    // if (event.origin !== 'your-iframe-domain.com') return;
 
-// Call sendHeightToParent whenever the content height changes
-window.onload = sendHeightToParent;
-window.addEventListener('resize', sendHeightToParent);
-// Example: After workout generation
-// document.getElementById('generateButton').addEventListener('click', function() {
-//     setTimeout(sendHeightToParent, 500);
-// });
+    if (event.data && event.data.height) {
+        const iframe = document.getElementById('yourIframeId');
+        if (iframe) {
+            iframe.style.height = event.data.height + 'px';
+        }
+    }
+});
+
+window.onload = function() {
+    const iframe = document.getElementById('yourIframeId');
+    if (iframe) {
+        iframe.src = 'https://post40gains-fitness-tools.kurtastarita.com/ultimate-workout-log'; // Set the iframe source after the listener is set up
+    }
+};
