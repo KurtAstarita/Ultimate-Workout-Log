@@ -84,7 +84,7 @@ confirmYes.addEventListener("click", () => {
     console.log("After removeChild - workoutEntries.scrollHeight:", workoutEntries.scrollHeight);
     confirmationDialog.style.display = "none";
     entryToRemove = null;
-    sendHeightToParent(); // Call after removing
+    setTimeout(sendHeightToParent, 50); // 50ms delay
 });
 
     confirmNo.addEventListener("click", () => {
