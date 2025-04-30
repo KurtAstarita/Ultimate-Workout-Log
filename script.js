@@ -245,3 +245,24 @@ document.addEventListener('DOMContentLoaded', function() {
         reader.readAsText(file);
     });
 });
+
+
+<!-- .......................... Flexable Iframe .................................... -->
+
+function sendHeightToParent() {
+    const contentHeight = Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight,
+        document.body.offsetHeight,
+        document.documentElement.offsetHeight
+    );
+    window.parent.postMessage({ height: contentHeight }, 'https://post40gains-fitness-tools.kurtastarita.com'); // Replace '*' with your parent's origin for security
+}
+
+// Call sendHeightToParent whenever the content height changes
+window.onload = sendHeightToParent;
+window.addEventListener('resize', sendHeightToParent);
+// Example: After workout generation
+// document.getElementById('generateButton').addEventListener('click', function() {
+//     setTimeout(sendHeightToParent, 500);
+// });
