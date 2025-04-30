@@ -195,9 +195,6 @@ document.addEventListener('DOMContentLoaded', function() {
             alert("Failed to generate PDF. Please try again.");
         }
     });
-
-  // .................... COMMENT OUT EVERYTHING BELOW THIS LINE TEMPORARILY ..........................
-    /*
     
     document.getElementById("download-workout").addEventListener("click", () => {
         const workout = localStorage.getItem("workoutLog");
@@ -210,6 +207,10 @@ document.addEventListener('DOMContentLoaded', function() {
         a.click();
         URL.revokeObjectURL(a.href);
     });
+
+
+  // .................... COMMENT OUT EVERYTHING BELOW THIS LINE TEMPORARILY ..........................
+    /*
 
     document.getElementById("upload-workout").addEventListener("change", event => {
         const file = event.target.files[0];
