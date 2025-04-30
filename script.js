@@ -261,6 +261,7 @@ function sendHeightToParent() {
         document.documentElement.offsetHeight
     );
     window.parent.postMessage({ height: contentHeight }, 'https://post40gains-fitness-tools.kurtastarita.com/ultimate-workout-log');
-
+}
+    
 window.onload = sendHeightToParent;
 window.addEventListener('resize', sendHeightToParent);
