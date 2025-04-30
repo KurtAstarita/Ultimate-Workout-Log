@@ -52,6 +52,9 @@ document.addEventListener('DOMContentLoaded', function() {
         return DOMPurify.sanitize(input);
     }
 
+   // COMMENT OUT EVERYTHING BELOW THIS LINE TEMPORARILY
+    /*
+    
     document.getElementById("add-entry").addEventListener("click", () => {
         const entry = document.createElement("div");
         entry.classList.add("workout-entry");
@@ -248,7 +251,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
         reader.readAsText(file);
     });
-
+*/ // COMMENT OUT EVERYTHING ABOVE THIS LINE TEMPORARILY
 
 <!-- .......................... Flexable Iframe .................................... -->
 
