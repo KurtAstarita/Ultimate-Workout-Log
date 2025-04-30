@@ -1,10 +1,16 @@
 /* Workout Log Styles */
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
 .workout-log-container {
   box-sizing: border-box;
   font-family: sans-serif;
   width: 100%;
   max-width: 100%;
-  margin-bottom: 2em; /* Add some space below the log */
+  margin-bottom: 0; /* Add some space below the log */
 }
 
 .workout-log-container h1 {
