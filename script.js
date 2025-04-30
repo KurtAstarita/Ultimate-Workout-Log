@@ -75,9 +75,6 @@ document.addEventListener('DOMContentLoaded', function() {
             confirmationDialog.style.display = "block";
         }
     });
-
-   // .................... COMMENT OUT EVERYTHING BELOW THIS LINE TEMPORARILY ..........................
-    /*
     
     confirmYes.addEventListener("click", () => {
         workoutEntries.removeChild(entryToRemove);
@@ -90,6 +87,9 @@ document.addEventListener('DOMContentLoaded', function() {
         confirmationDialog.style.display = "none";
         entryToRemove = null;
     });
+
+   // .................... COMMENT OUT EVERYTHING BELOW THIS LINE TEMPORARILY ..........................
+    /*
 
     document.getElementById("save-workout").addEventListener("click", () => {
         const currentTime = Date.now();
