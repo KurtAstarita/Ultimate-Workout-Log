@@ -63,6 +63,9 @@ document.addEventListener('DOMContentLoaded', function() {
             <input type="text" placeholder="Notes" id="notes-${Date.now()}">
         `;
         workoutEntries.appendChild(entry);
+         
+        // Call sendHeightToParent() after adding a new entry
+        sendHeightToParent();
     });
 
     document.getElementById("remove-entry").addEventListener("click", () => {
@@ -256,13 +259,9 @@ function sendHeightToParent() {
         document.body.offsetHeight,
         document.documentElement.offsetHeight
     );
-    window.parent.postMessage({ height: contentHeight }, 'https://post40gains-fitness-tools.kurtastarita.com'); // Replace '*' with your parent's origin for security
+    window.parent.postMessage({ height: contentHeight }, 'https://kurtastarita.github.io'); // Make sure this origin is correct
 }
 
 // Call sendHeightToParent whenever the content height changes
 window.onload = sendHeightToParent;
 window.addEventListener('resize', sendHeightToParent);
-// Example: After workout generation
-// document.getElementById('generateButton').addEventListener('click', function() {
-//     setTimeout(sendHeightToParent, 500);
-// });
