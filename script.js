@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', function() {
     let lastSaveTime = 0;
     const saveInterval = 2000; // 2 seconds
 
+  // Call sendHeightToParent immediately after DOM is loaded
+  sendHeightToParent();
+    
     function validateInput(inputId, type, maxLength, required = false) {
         const input = document.getElementById(inputId);
         const value = input ? input.value : "";
