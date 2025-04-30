@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
    // COMMENT OUT EVERYTHING BELOW THIS LINE TEMPORARILY
     /*
+
     
     document.getElementById("remove-entry").addEventListener("click", () => {
         if (workoutEntries.children.length > 1) {
