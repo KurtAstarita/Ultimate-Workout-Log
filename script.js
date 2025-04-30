@@ -261,17 +261,25 @@ confirmYes.addEventListener("click", () => {
 <!-- .......................... Flexable Iframe .................................... -->
 
 function sendHeightToParent() {
+    // Force layout reflow
+    document.body.offsetHeight; // Trigger reflow
+
     const bodyScrollHeight = document.body.scrollHeight;
     const htmlScrollHeight = document.documentElement.scrollHeight;
     const bodyOffsetHeight = document.body.offsetHeight;
     const htmlOffsetHeight = document.documentElement.offsetHeight;
     const calculatedHeight = Math.max(bodyScrollHeight, htmlScrollHeight, bodyOffsetHeight, htmlOffsetHeight);
 
+    // Add padding to ensure all content is visible
+    const padding = 20; // Adjust as needed
+    const finalHeight = calculatedHeight + padding;
+
     console.log("Body Scroll Height:", bodyScrollHeight);
     console.log("HTML Scroll Height:", htmlScrollHeight);
     console.log("Body Offset Height:", bodyOffsetHeight);
     console.log("HTML Offset Height:", htmlOffsetHeight);
     console.log("Calculated Height:", calculatedHeight);
+    console.log("Final Height with Padding:", finalHeight);
 
     window.parent.postMessage({ height: calculatedHeight }, 'https://post40gains-fitness-tools.kurtastarita.com/ultimate-workout-log');
 }
