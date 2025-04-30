@@ -278,7 +278,7 @@ function sendHeightToParent() {
     console.log("Calculated Height:", calculatedHeight);
     console.log("Final Height with Padding:", finalHeight);
 
-    window.parent.postMessage({ height: finalHeight }, 'https://kurtastarita.github.io/utimate-workout-log');
+    window.parent.postMessage({ height: finalHeight }, 'https://kurtastarita.github.io');
 }
     
 window.onload = sendHeightToParent;
