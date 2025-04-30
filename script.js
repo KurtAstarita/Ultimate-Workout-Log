@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Call sendHeightToParent() after adding a new entry
         sendHeightToParent();
-    });
+     });
 
     document.getElementById("remove-entry").addEventListener("click", () => {
         if (workoutEntries.children.length > 1) {
@@ -249,7 +249,6 @@ document.addEventListener('DOMContentLoaded', function() {
         reader.readAsText(file);
     });
 });
-
 
 <!-- .......................... Flexable Iframe .................................... -->
 
