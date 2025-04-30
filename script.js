@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <input type="text" placeholder="Notes" id="notes-${Date.now()}">
         `;
         workoutEntries.appendChild(entry);
-         
+
         // Call sendHeightToParent() after adding a new entry
         sendHeightToParent();
     });
