@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
         reader.readAsText(file);
     });
-
+ });
 
 <!-- .......................... Flexable Iframe .................................... -->
 
