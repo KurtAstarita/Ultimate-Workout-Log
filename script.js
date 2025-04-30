@@ -208,10 +208,6 @@ document.addEventListener('DOMContentLoaded', function() {
         URL.revokeObjectURL(a.href);
     });
 
-
-  // .................... COMMENT OUT EVERYTHING BELOW THIS LINE TEMPORARILY ..........................
-    /*
-
     document.getElementById("upload-workout").addEventListener("change", event => {
         const file = event.target.files[0];
         if (!file) return;
@@ -253,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
         reader.readAsText(file);
     });
-*/ // COMMENT OUT EVERYTHING ABOVE THIS LINE TEMPORARILY
+
 
 <!-- .......................... Flexable Iframe .................................... -->
 
