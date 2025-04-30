@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
         workoutEntries.removeChild(entryToRemove);
         confirmationDialog.style.display = "none";
         entryToRemove = null;
+        sendHeightToParent(); // Call after removing
     });
 
     confirmNo.addEventListener("click", () => {
@@ -259,9 +260,8 @@ function sendHeightToParent() {
         document.body.offsetHeight,
         document.documentElement.offsetHeight
     );
-    window.parent.postMessage({ height: contentHeight }, 'https://post40gains-fitness-tools.kurtastarita.com/ultimate-workout-log'); // Make sure this origin is correct
-}
+    window.parent.postMessage({ height: contentHeight }, 'https://post40gains-fitness-tools.kurtastarita.com/ultimate-workout-log');
 
-// Call sendHeightToParent whenever the content height changes
 window.onload = sendHeightToParent;
 window.addEventListener('resize', sendHeightToParent);
+});
