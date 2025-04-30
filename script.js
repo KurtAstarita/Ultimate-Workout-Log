@@ -130,9 +130,6 @@ document.addEventListener('DOMContentLoaded', function() {
         alert("Workout log saved!");
         lastSaveTime = currentTime;
     });
-
-  // .................... COMMENT OUT EVERYTHING BELOW THIS LINE TEMPORARILY ..........................
-    /*
     
     document.getElementById("load-workout").addEventListener("click", () => {
         const savedWorkout = localStorage.getItem("workoutLog");
@@ -153,6 +150,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+  // .................... COMMENT OUT EVERYTHING BELOW THIS LINE TEMPORARILY ..........................
+    /*
+    
     document.getElementById("print-pdf").addEventListener("click", () => {
         const { jsPDF } = window.jspdf;
         if (!jsPDF) {
