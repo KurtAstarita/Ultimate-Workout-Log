@@ -68,9 +68,6 @@ document.addEventListener('DOMContentLoaded', function() {
         sendHeightToParent();
      });
 
-   // COMMENT OUT EVERYTHING BELOW THIS LINE TEMPORARILY
-    /*
-
     
     document.getElementById("remove-entry").addEventListener("click", () => {
         if (workoutEntries.children.length > 1) {
@@ -79,6 +76,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+   // .................... COMMENT OUT EVERYTHING BELOW THIS LINE TEMPORARILY ..........................
+    /*
+    
     confirmYes.addEventListener("click", () => {
         workoutEntries.removeChild(entryToRemove);
         confirmationDialog.style.display = "none";
