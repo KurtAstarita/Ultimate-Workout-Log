@@ -76,12 +76,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    confirmYes.addEventListener("click", () => {
-        workoutEntries.removeChild(entryToRemove);
-        confirmationDialog.style.display = "none";
-        entryToRemove = null;
-        sendHeightToParent(); // Call after removing
-    });
+confirmYes.addEventListener("click", () => {
+    console.log("Before removeChild - workoutEntries.offsetHeight:", workoutEntries.offsetHeight);
+    console.log("Before removeChild - workoutEntries.scrollHeight:", workoutEntries.scrollHeight);
+    workoutEntries.removeChild(entryToRemove);
+    console.log("After removeChild - workoutEntries.offsetHeight:", workoutEntries.offsetHeight);
+    console.log("After removeChild - workoutEntries.scrollHeight:", workoutEntries.scrollHeight);
+    confirmationDialog.style.display = "none";
+    entryToRemove = null;
+    sendHeightToParent(); // Call after removing
+});
 
     confirmNo.addEventListener("click", () => {
         confirmationDialog.style.display = "none";
