@@ -84,7 +84,7 @@ confirmYes.addEventListener("click", () => {
     console.log("After removeChild - workoutEntries.scrollHeight:", workoutEntries.scrollHeight);
     confirmationDialog.style.display = "none";
     entryToRemove = null;
-    setTimeout(sendHeightToParent, 50); // 50ms delay
+    setTimeout(sendHeightToParent, 100); // 100ms delay
 });
 
     confirmNo.addEventListener("click", () => {
@@ -258,19 +258,27 @@ confirmYes.addEventListener("click", () => {
 <!-- .......................... Flexable Iframe .................................... -->
 
 function sendHeightToParent() {
+    // Force layout reflow
+    document.body.offsetHeight; // Trigger reflow
+
     const bodyScrollHeight = document.body.scrollHeight;
     const htmlScrollHeight = document.documentElement.scrollHeight;
     const bodyOffsetHeight = document.body.offsetHeight;
     const htmlOffsetHeight = document.documentElement.offsetHeight;
     const calculatedHeight = Math.max(bodyScrollHeight, htmlScrollHeight, bodyOffsetHeight, htmlOffsetHeight);
 
+    // Add padding to ensure all content is visible
+    const padding = 20; // Adjust as needed
+    const finalHeight = calculatedHeight + padding;
+
     console.log("Body Scroll Height:", bodyScrollHeight);
     console.log("HTML Scroll Height:", htmlScrollHeight);
     console.log("Body Offset Height:", bodyOffsetHeight);
     console.log("HTML Offset Height:", htmlOffsetHeight);
     console.log("Calculated Height:", calculatedHeight);
+    console.log("Final Height with Padding:", finalHeight);
 
-    window.parent.postMessage({ height: calculatedHeight }, 'https://kurtastarita.github.io');
+    window.parent.postMessage({ height: finalHeight }, 'https://kurtastarita.github.io');
 }
     
 window.onload = sendHeightToParent;
