@@ -51,9 +51,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function sanitizeInput(input) {
         return DOMPurify.sanitize(input);
     }
-
-   // COMMENT OUT EVERYTHING BELOW THIS LINE TEMPORARILY
-    /*
     
     document.getElementById("add-entry").addEventListener("click", () => {
         const entry = document.createElement("div");
@@ -71,6 +68,9 @@ document.addEventListener('DOMContentLoaded', function() {
         sendHeightToParent();
      });
 
+   // COMMENT OUT EVERYTHING BELOW THIS LINE TEMPORARILY
+    /*
+    
     document.getElementById("remove-entry").addEventListener("click", () => {
         if (workoutEntries.children.length > 1) {
             entryToRemove = workoutEntries.lastChild;
