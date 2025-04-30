@@ -88,9 +88,6 @@ document.addEventListener('DOMContentLoaded', function() {
         entryToRemove = null;
     });
 
-   // .................... COMMENT OUT EVERYTHING BELOW THIS LINE TEMPORARILY ..........................
-    /*
-
     document.getElementById("save-workout").addEventListener("click", () => {
         const currentTime = Date.now();
         if (currentTime - lastSaveTime < saveInterval) {
@@ -134,6 +131,9 @@ document.addEventListener('DOMContentLoaded', function() {
         lastSaveTime = currentTime;
     });
 
+  // .................... COMMENT OUT EVERYTHING BELOW THIS LINE TEMPORARILY ..........................
+    /*
+    
     document.getElementById("load-workout").addEventListener("click", () => {
         const savedWorkout = localStorage.getItem("workoutLog");
         if (!savedWorkout) return alert("No saved workout log found.");
