@@ -273,7 +273,7 @@ function sendHeightToParent() {
     console.log("HTML Offset Height:", htmlOffsetHeight);
     console.log("Calculated Height:", calculatedHeight);
 
-    window.parent.postMessage({ height: calculatedHeight }, 'https://kurtastarita.github.io');
+    window.parent.postMessage({ height: calculatedHeight }, 'https://kurtastarita.github.io/ultimate-workout-log');
 }
     
 window.onload = sendHeightToParent;
