@@ -254,13 +254,19 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- .......................... Flexable Iframe .................................... -->
 
 function sendHeightToParent() {
-    const contentHeight = Math.max(
-        document.body.scrollHeight,
-        document.documentElement.scrollHeight,
-        document.body.offsetHeight,
-        document.documentElement.offsetHeight
-    );
-    window.parent.postMessage({ height: contentHeight }, 'https://post40gains-fitness-tools.kurtastarita.com/ultimate-workout-log');
+    const bodyScrollHeight = document.body.scrollHeight;
+    const htmlScrollHeight = document.documentElement.scrollHeight;
+    const bodyOffsetHeight = document.body.offsetHeight;
+    const htmlOffsetHeight = document.documentElement.offsetHeight;
+    const calculatedHeight = Math.max(bodyScrollHeight, htmlScrollHeight, bodyOffsetHeight, htmlOffsetHeight);
+
+    console.log("Body Scroll Height:", bodyScrollHeight);
+    console.log("HTML Scroll Height:", htmlScrollHeight);
+    console.log("Body Offset Height:", bodyOffsetHeight);
+    console.log("HTML Offset Height:", htmlOffsetHeight);
+    console.log("Calculated Height:", calculatedHeight);
+
+    window.parent.postMessage({ height: calculatedHeight }, 'https://post40gains-fitness-tools.kurtastarita.com/ultimate-workout-log');
 }
     
 window.onload = sendHeightToParent;
