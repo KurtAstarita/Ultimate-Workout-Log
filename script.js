@@ -149,9 +149,6 @@ document.addEventListener('DOMContentLoaded', function() {
             inputFields.forEach((input, index) => (input.value = entry[index] || ""));
         });
     });
-
-  // .................... COMMENT OUT EVERYTHING BELOW THIS LINE TEMPORARILY ..........................
-    /*
     
     document.getElementById("print-pdf").addEventListener("click", () => {
         const { jsPDF } = window.jspdf;
@@ -199,6 +196,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+  // .................... COMMENT OUT EVERYTHING BELOW THIS LINE TEMPORARILY ..........................
+    /*
+    
     document.getElementById("download-workout").addEventListener("click", () => {
         const workout = localStorage.getItem("workoutLog");
         if (!workout) return alert("No workout log to download. Add and save entries first!");
