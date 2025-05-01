@@ -10,9 +10,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let lastSaveTime = 0;
     const saveInterval = 2000; // 2 seconds
 
-  // Call sendHeightToParent immediately after DOM is loaded
-  sendHeightToParent();
-    
     function validateInput(inputId, type, maxLength, required = false) {
         const input = document.getElementById(inputId);
         const value = input ? input.value : "";
@@ -54,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function sanitizeInput(input) {
         return DOMPurify.sanitize(input);
     }
-    
+
     document.getElementById("add-entry").addEventListener("click", () => {
         const entry = document.createElement("div");
         entry.classList.add("workout-entry");
@@ -66,29 +63,20 @@ document.addEventListener('DOMContentLoaded', function() {
             <input type="text" placeholder="Notes" id="notes-${Date.now()}">
         `;
         workoutEntries.appendChild(entry);
+    });
 
-        // Call sendHeightToParent() after adding a new entry
-        sendHeightToParent();
-     });
-
-    
     document.getElementById("remove-entry").addEventListener("click", () => {
         if (workoutEntries.children.length > 1) {
             entryToRemove = workoutEntries.lastChild;
             confirmationDialog.style.display = "block";
         }
     });
-    
-confirmYes.addEventListener("click", () => {
-    console.log("Before removeChild - workoutEntries.offsetHeight:", workoutEntries.offsetHeight);
-    console.log("Before removeChild - workoutEntries.scrollHeight:", workoutEntries.scrollHeight);
-    workoutEntries.removeChild(entryToRemove);
-    console.log("After removeChild - workoutEntries.offsetHeight:", workoutEntries.offsetHeight);
-    console.log("After removeChild - workoutEntries.scrollHeight:", workoutEntries.scrollHeight);
-    confirmationDialog.style.display = "none";
-    entryToRemove = null;
-    setTimeout(sendHeightToParent, 100); // 100ms delay
-});
+
+    confirmYes.addEventListener("click", () => {
+        workoutEntries.removeChild(entryToRemove);
+        confirmationDialog.style.display = "none";
+        entryToRemove = null;
+    });
 
     confirmNo.addEventListener("click", () => {
         confirmationDialog.style.display = "none";
@@ -137,7 +125,7 @@ confirmYes.addEventListener("click", () => {
         alert("Workout log saved!");
         lastSaveTime = currentTime;
     });
-    
+
     document.getElementById("load-workout").addEventListener("click", () => {
         const savedWorkout = localStorage.getItem("workoutLog");
         if (!savedWorkout) return alert("No saved workout log found.");
@@ -156,7 +144,7 @@ confirmYes.addEventListener("click", () => {
             inputFields.forEach((input, index) => (input.value = entry[index] || ""));
         });
     });
-    
+
     document.getElementById("print-pdf").addEventListener("click", () => {
         const { jsPDF } = window.jspdf;
         if (!jsPDF) {
@@ -202,7 +190,7 @@ confirmYes.addEventListener("click", () => {
             alert("Failed to generate PDF. Please try again.");
         }
     });
-    
+
     document.getElementById("download-workout").addEventListener("click", () => {
         const workout = localStorage.getItem("workoutLog");
         if (!workout) return alert("No workout log to download. Add and save entries first!");
@@ -256,33 +244,4 @@ confirmYes.addEventListener("click", () => {
         };
         reader.readAsText(file);
     });
- });
-
-<!-- .......................... Flexable Iframe .................................... -->
-
-function sendHeightToParent() {
-    // Force layout reflow
-    document.body.offsetHeight; // Trigger reflow
-
-    const bodyScrollHeight = document.body.scrollHeight;
-    const htmlScrollHeight = document.documentElement.scrollHeight;
-    const bodyOffsetHeight = document.body.offsetHeight;
-    const htmlOffsetHeight = document.documentElement.offsetHeight;
-    const calculatedHeight = Math.max(bodyScrollHeight, htmlScrollHeight, bodyOffsetHeight, htmlOffsetHeight);
-
-    // Add padding to ensure all content is visible
-    const padding = 20; // Adjust as needed
-    const finalHeight = calculatedHeight + padding;
-
-    console.log("Body Scroll Height:", bodyScrollHeight);
-    console.log("HTML Scroll Height:", htmlScrollHeight);
-    console.log("Body Offset Height:", bodyOffsetHeight);
-    console.log("HTML Offset Height:", htmlOffsetHeight);
-    console.log("Calculated Height:", calculatedHeight);
-    console.log("Final Height with Padding:", finalHeight);
-
-    window.parent.postMessage({ height: calculatedHeight }, 'https://post40gains-fitness-tools.kurtastarita.com/ultimate-workout-log');
-}
-    
-window.onload = sendHeightToParent;
-window.addEventListener('resize', sendHeightToParent);
+});
