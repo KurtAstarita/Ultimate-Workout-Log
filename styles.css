@@ -1,16 +1,13 @@
+/* General Reset (Optional, but Recommended) */
+/* You might include a link to Normalize.css here */
+
 /* Workout Log Styles */
-
-html, body {
-    margin: 0;
-    padding: 0;
-}
-
 .workout-log-container {
   box-sizing: border-box;
   font-family: sans-serif;
   width: 100%;
   max-width: 100%;
-  margin-bottom: 0; /* Add some space below the log */
+  margin-bottom: 2em; /* Add some space below the log */
 }
 
 .workout-log-container h1 {
@@ -204,8 +201,7 @@ footer a {
 /* -------------------- Social Share Styles --------------------------- */
 
 .social-share {
-  margin-top: 1em;
-  margin-bottom: 1em;
+  margin-top: 2em;
   padding: 1em;
   border: 1px solid #eee;
   border-radius: 5px;
