@@ -35,6 +35,22 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (type === 'date' && isNaN(Date.parse(value))) {
             isValid = false;
             errorMessage = `Invalid date for ${inputId.replace('-', ' ')}.`;
+        } else if (type === 'comma-separated-numbers') { // New validation type
+            if (value.trim() === '') {
+                if (required) {
+                    isValid = false;
+                    errorMessage = `Please fill out the ${inputId.replace('-', ' ')} field.`;
+                }
+            } else {
+                const numbers = value.split(',').map(num => num.trim());
+                for (const numStr of numbers) {
+                    if (!/^\d+$/.test(numStr) || parseInt(numStr) < 1) {
+                        isValid = false;
+                        errorMessage = `Invalid value in ${inputId.replace('-', ' ')}. All values must be positive integers separated by commas.`;
+                        break;
+                    }
+                }
+            }
         }
 
         if (!isValid && inputId) {
@@ -57,12 +73,24 @@ document.addEventListener('DOMContentLoaded', function() {
         entry.classList.add("workout-entry");
         entry.innerHTML = `
             <input type="text" placeholder="Exercise" id="exercise-${Date.now()}">
-            <input type="number" placeholder="Sets" min="1" id="sets-${Date.now()}">
-            <input type="number" placeholder="Reps" min="1" id="reps-${Date.now()}">
+            <input type="text" placeholder="Sets (Eg. 1, 2)" id="sets-${Date.now()}"> <input type="number" placeholder="Reps" min="1" id="reps-${Date.now()}">
             <input type="number" placeholder="Weight" min="0" id="weight-${Date.now()}">
             <input type="text" placeholder="Notes" id="notes-${Date.now()}">
         `;
         workoutEntries.appendChild(entry);
+    });
+
+    // Event delegation for sets input to add commas on space
+    workoutEntries.addEventListener('keyup', (event) => {
+        if (event.target.placeholder && event.target.placeholder.startsWith('Sets')) {
+            if (event.key === ' ') {
+                event.preventDefault(); // Prevent the default space character
+                let value = event.target.value;
+                if (value.length > 0 && !value.endsWith(', ')) {
+                    event.target.value = value.trim() + ', ';
+                }
+            }
+        }
     });
 
     document.getElementById("remove-entry").addEventListener("click", () => {
@@ -104,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .map(entry => {
                     const inputs = Array.from(entry.querySelectorAll("input"));
                     const exerciseValid = validateInput(inputs[0].id || "", "text", 255, true);
-                    const setsValid = validateInput(inputs[1].id || "", "integer", null, true);
+                    const setsValid = validateInput(inputs[1].id || "", "comma-separated-numbers", null, true); // Changed validation type
                     const repsValid = validateInput(inputs[2].id || "", "integer", null, true);
                     const weightValid = validateInput(inputs[3].id || "", "number", null, true);
                     const notesValid = validateInput(inputs[4].id || "", "text", 255, false);
@@ -146,7 +174,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.getElementById("print-pdf").addEventListener("click", () => {
-        const { jsPDF } = window.jspdf;
+        const {
+            jsPDF
+        } = window.jspdf;
         if (!jsPDF) {
             alert("jsPDF library not loaded. PDF generation is unavailable.");
             return;
@@ -195,7 +225,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const workout = localStorage.getItem("workoutLog");
         if (!workout) return alert("No workout log to download. Add and save entries first!");
 
-        const blob = new Blob([workout], { type: "application/json" });
+        const blob = new Blob([workout], {
+            type: "application/json"
+        });
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
         a.download = "workoutLog.json";
@@ -222,14 +254,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 for (const entry of parsedData.entries) {
                     if (!Array.isArray(entry) || entry.length !== 5 ||
-                        typeof entry[0] !== 'string' || (typeof entry[1] !== 'string' && isNaN(Number(entry[1]))) ||
-                        (typeof entry[2] !== 'string' && isNaN(Number(entry[2]))) || (typeof entry[3] !== 'string' && isNaN(Number(entry[3]))) ||
+                        typeof entry[0] !== 'string' ||
+                        (typeof entry[1] !== 'string' && isNaN(Number(String(entry[1]).split(',')[0]))) || // Adjusted for comma-separated
+                        (typeof entry[2] !== 'string' && isNaN(Number(entry[2]))) ||
+                        (typeof entry[3] !== 'string' && isNaN(Number(entry[3]))) ||
                         typeof entry[4] !== 'string'
                     ) {
                         throw new Error("Invalid workout entry structure.");
                     }
-                    // Ensure numeric values are treated as numbers
-                    entry[1] = Number(entry[1]);
+                    // No direct number conversion for entry[1] anymore, as it's a string with commas
                     entry[2] = Number(entry[2]);
                     entry[3] = Number(entry[3]);
                 }
